@@ -13,6 +13,7 @@ import FavoritesPage from './components/FavoritesPage';
 import ScrollToTop from './components/ScrollToTop';
 import MovieSchedule from './components/lich_chieu';
 import SeatBooking from './components/SeatBooking';
+import PrivacyPolicy from './components/privacyPolicy';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/schedule" element={<MovieSchedule />} />
           <Route path="/seat-booking" element={<SeatBooking />} />
           {/* <Route path="/payment" component={PaymentPage} /> */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
       </Layout>
     </Router>

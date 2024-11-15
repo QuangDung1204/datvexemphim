@@ -1,5 +1,5 @@
 // src/components/Layout.jsx
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import LocalActivityOutlinedIcon from '@mui/icons-material/LocalActivityOutlined';
@@ -9,26 +9,13 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import DehazeIcon from '@mui/icons-material/Dehaze';
-import HomeIcon from '@mui/icons-material/Home';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 function Layout({ children }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navigate = useNavigate();
     const [isHovered, setIsHovered] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [username, setUsername] = useState(null); // State để lưu tên người dùng
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
-    const handleNavigation = (path) => {
-        setIsMenuOpen(false);  // Đóng menu
-        navigate(path);
-    };
-
-    // Đóng menu khi click ra ngoài
     useEffect(() => {
         const closeMenu = (e) => {
             if (isMenuOpen && !e.target.closest('.menu-container')) {
@@ -39,52 +26,41 @@ function Layout({ children }) {
         return () => document.removeEventListener('click', closeMenu);
     }, [isMenuOpen]);
 
-    const [searchTerm, setSearchTerm] = useState('');
+    // Gọi API để lấy tên người dùng
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('http://localhost/WebDatVeXemPhim/backend/getUsers.php');
+                const data = await response.json();
+                if (data.success) {
+                    setUsername(data.data); // Lưu tên người dùng vào state
+                } else {
+                    console.error('Lỗi khi lấy dữ liệu:', data.error);
+                }
+            } catch (error) {
+                console.error('Lỗi khi gọi API:', error);
+            }
+        };
+
+        // Lấy tên người dùng từ localStorage
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            setUsername(storedUsername);
+        } else {
+            fetchUsers(); // Nếu không có tên người dùng trong localStorage, gọi API
+        }
+    }, []);
 
     const handleSearch = () => {
-        // Thực hiện tìm kiếm với searchTerm
         console.log('Tìm kiếm:', searchTerm);
-        // Bạn có thể thêm logic tìm kiếm ở đây
     };
     return (
         <div className="relative min-h-screen">
-            <header className="fixed top-0 left-0 right-0 w-full h-[100px] z-[9999]"
-                style={{ backgroundColor: 'rgba(33, 32, 30, 1)' }}>
+            <header className="fixed top-0 left-0 right-0 w-full h-[100px] z-[9999] bg-[#211E1E]">
                 <div className="h-full max-w-[1300px] mx-auto px-8 flex justify-between items-center">
-                    {/* Logo và tên */}
                     <h1 className="text-3xl text-white font-bold cursor-pointer flex items-center">
-                        <div className="flex items-center menu-container">
-                            <DehazeIcon
-                                onClick={toggleMenu}
-                                className="text-3xl mr-5 cursor-pointer text-purple-600"
-                            />
-                            {isMenuOpen && (
-                                <div className="fixed top-[100px] left-0 w-[234px] h-[700px] bg-[#191817] shadow-lg z-[10000] transition-transform duration-300 ease-in-out transform translate-x-0">
-                                    <div className="flex flex-col h-full pt-[40px]">
-                                        <Link to="/"
-                                            onClick={() => handleNavigation("/")}
-                                            className="px-6 py-4 text-white text-xl hover:text-purple-600 transition-colors duration-300 flex items-center gap-2">
-                                            <HomeIcon />
-                                            <span>Trang chủ</span>
-                                        </Link>
-                                        <Link to="/schedule"
-                                            onClick={() => handleNavigation("/schedule")}
-                                            className="px-6 py-4 text-white text-xl hover:text-purple-600 transition-colors duration-300 flex items-center gap-2">
-                                            <CalendarTodayIcon />
-                                            <span>Lịch chiếu</span>
-                                        </Link>
-                                        <Link to="/yeuthich"
-                                            onClick={() => handleNavigation("/yeuthich")}
-                                            className="px-6 py-4 text-white text-xl hover:text-purple-600 transition-colors duration-300 flex items-center gap-2">
-                                            <FavoriteBorderIcon />
-                                            <span>Yêu thích</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
                         <Link to="/" className="flex items-center">
-                            5ANHTAI
+                            Horizon Cinema
                         </Link>
                     </h1>
 
@@ -111,28 +87,16 @@ function Layout({ children }) {
                             </div>
                         </div>
                         <div
-                            style={{ position: 'relative', display: 'inline-block' }} // Đảm bảo thẻ có vị trí tương đối
+                            className="relative inline-block"
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
                         >
-                            <div to="/thong-bao" className="text-white">
+                            <div className="text-white">
                                 <NotificationsActiveOutlinedIcon />
                             </div>
                             {isHovered && (
                                 <div
-                                    style={{
-                                        position: 'absolute',
-                                        bottom: '100%', // Đưa bảng thông báo lên trên icon
-                                        left: '50%',
-                                        transform: 'translateX(-50%)', // Căn giữa bảng thông báo
-                                        backgroundColor: '#333', // Màu nền của bảng thông báo
-                                        color: 'white', // Màu chữ
-                                        padding: '10px',
-                                        borderRadius: '5px',
-                                        whiteSpace: 'nowrap', // Ngăn không cho chữ xuống dòng
-                                        zIndex: 1000, // Đảm bảo bảng thông báo nằm trên các phần tử khác
-                                        opacity: 0.9 // Độ trong suốt
-                                    }}
+                                    className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-[#333] text-white p-2 rounded opacity-90 whitespace-nowrap z-50"
                                 >
                                     Không có thông báo nào
                                 </div>
@@ -141,24 +105,33 @@ function Layout({ children }) {
 
                         <Link
                             to="/Dat-Ve"
-                            className="w-[140px] h-10 rounded flex items-center justify-center"
-                            style={{ backgroundColor: 'rgba(238, 231, 24, 1)' }}
+                            className="w-[140px] h-10 rounded flex items-center justify-center bg-[#EEE718]"
                         >
                             <LocalActivityOutlinedIcon className="mr-2" />
                             <span className="text-black">Đặt Vé Ngay</span>
                         </Link>
 
-                        <Link
-                            to="/Dang-Nhap"
-                            className="w-[140px] h-10 rounded flex items-center justify-center text-white"
-                            style={{ backgroundColor: 'rgba(101, 15, 186, 1)' }}
-                        >
-                            <AccountCircleOutlinedIcon className="mr-2" />
-                            <span>Đăng Nhập</span>
-                        </Link>
+                        {/* Hiển thị tên người dùng nếu đã đăng nhập, nếu không hiển thị nút Đăng Nhập */}
+                        {username ? (
+                            <Link
+                                className="w-[140px] h-10 rounded flex items-center justify-center text-white bg-[#650FBA]"
+                            >
+                                <AccountCircleOutlinedIcon className="mr-2" />
+                                <span>{username}</span>
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/Dang-Nhap"
+                                className="w-[140px] h-10 rounded flex items-center justify-center text-white bg-[#650FBA]"
+                            >
+                                <AccountCircleOutlinedIcon className="mr-2" />
+                                <span>Đăng Nhập</span>
+                            </Link>
+                        )}
                     </div>
                 </div>
             </header>
+
 
             {/* Main Content */}
             <main className="pt-[100px]">
@@ -169,17 +142,18 @@ function Layout({ children }) {
             <footer className="bg-gray-800 text-white py-8">
                 <div className="container mx-auto flex flex-col md:flex-row md:justify-between md:space-x-8">
                     <div className="flex-1 pl-52 mb-6 md:mb-0">
-                        <h1 className="text-2xl font-bold">5ANHTAI</h1>
-                        <p className="mt-2">
+                        <h1 className="text-2xl font-bold">Horizon Cinema</h1>
+                        {/* <p className="mt-2">
                             HÃY ĐẶT VÉ KHI BẠN CÓ TIỀN HOẶC KHÔNG CÓ THÌ ĐI MƯỢN.
-                        </p>
+                        </p> */}
                     </div>
                     <div className="flex-1 mb-6 md:mb-0">
                         <h2 className="font-semibold">Giới thiệu</h2>
                         <ul className="mt-2 space-y-1">
                             <li>Quy chế sử dụng dịch vụ</li>
-                            <li>Chính sách bảo mật</li>
-                            <li>Khuyến mãi</li>
+                            <li>
+                                <Link to="/privacy-policy">Chính sách bảo mật</Link>
+                            </li>
                         </ul>
                     </div>
                     <div className="flex-1">
@@ -193,7 +167,7 @@ function Layout({ children }) {
                             <a href="#" className="text-pink-400 hover:text-pink-500">
                                 <InstagramIcon />
                             </a>
-                            <a href="#" className="text-pink-400 hover:text-pink-500">
+                            <a src="https://www.instagram.com/perry.t26/" className="text-pink-400 hover:text-pink-500">
                                 <YouTubeIcon />
                             </a>
                         </div>

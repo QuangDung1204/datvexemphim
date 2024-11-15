@@ -9,18 +9,35 @@ function Login() {
     const [loginError, setLoginError] = useState('');
     const navigate = useNavigate(); // Khởi tạo useNavigate
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        // Tạo tài khoản và mật khẩu để test
-        const testUsername = 'user@example.com';
-        const testPassword = 'password123';
 
-        if (username === testUsername && password === testPassword) {
-            setLoginError('');
-            localStorage.setItem('username', username); // Lưu tên người dùng vào localStorage
-            navigate('/'); // Chuyển hướng về trang chính
-        } else {
-            setLoginError('Tài khoản hoặc mật khẩu không đúng.');
+        try {
+            const response = await fetch('http://localhost/WebDatVeXemPhim/backend/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }), // Đảm bảo username và password được định nghĩa
+            });
+
+            // Kiểm tra mã trạng thái của phản hồi
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                setLoginError(''); // Xóa thông báo lỗi nếu đăng nhập thành công
+                localStorage.setItem('username', username); // Lưu tên người dùng vào local storage
+                navigate('/'); // Chuyển hướng về trang chính
+            } else {
+                setLoginError('Tài khoản hoặc mật khẩu không đúng.'); // Hiển thị thông báo lỗi
+            }
+        } catch (error) {
+            console.error('Lỗi:', error);
+            setLoginError('Đã xảy ra lỗi trong quá trình đăng nhập.'); // Hiển thị thông báo lỗi
         }
     };
 
@@ -120,12 +137,14 @@ function Login() {
                                 }}>Đăng Nhập</button>
                             {loginError && <p style={{ color: 'red', marginTop: '10px' }}>{loginError}</p>}
                         </form>
+
                     ) : (
                         <form>
                             {/* Form đăng ký có thể được thêm vào đây */}
                             <p>Chức năng đăng ký sẽ được thêm vào sau.</p>
                         </form>
                     )}
+
                 </div>
             </div>
         </div>

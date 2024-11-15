@@ -5,18 +5,15 @@ import harrypotter from '../imgs/banu.jpg';
 import panda from '../imgs/chiem.jpg';
 import avata from '../imgs/nhotchong.jpg';
 import { movieData } from '../data/movieData';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import marvel from '../imgs/Movie 6.jpg'
-import lockdown from '../imgs/Movie 7.jpg'
-import weath from '../imgs/Movie 8.jpg'
-import quantumania from '../imgs/Movie 9.jpg'
-import shazam from '../imgs/Movie 10.jpg'
 import skien1 from '../imgs/sk1.webp'
 import skien2 from '../imgs/sk2.webp'
 import skien3 from '../imgs/sk3.webp'
+import PlayCircleFilledWhiteOutlinedIcon from '@mui/icons-material/PlayCircleFilledWhiteOutlined';
+import { Link } from 'react-router-dom';
 
+// ảnh tĩnh
 const images = [harrypotter, panda, avata];
+
 
 function Homepages() {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,24 +34,19 @@ function Homepages() {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     };
 
+    const [showTrailer, setShowTrailer] = useState(null); // Để theo dõi phim nào đang hiển thị trailer
 
-    const [favorites, setFavorites] = useState(() => {
-        const savedFavorites = localStorage.getItem('favorites');
-        return savedFavorites ? JSON.parse(savedFavorites) : [];
-    });
-    const handleFavoriteClick = (movie) => {
-        setFavorites(prevFavorites => {
-            const isFavorited = prevFavorites.some(fav => fav.id === movie.id);
-            let newFavorites;
+    const handlePlayClick = (trailerUrl) => {
+        setShowTrailer(trailerUrl);
+    };
 
-            if (isFavorited) {
-                newFavorites = prevFavorites.filter(fav => fav.id !== movie.id);
-            } else {
-                newFavorites = [...prevFavorites, movie];
-            }
-            localStorage.setItem('favorites', JSON.stringify(newFavorites));
-            return newFavorites;
-        });
+    const closeTrailer = () => {
+        setShowTrailer(null);
+    };
+    const [showMessage, setShowMessage] = useState(false); // State để quản lý thông báo
+
+    const handleShowMore = () => {
+        setShowMessage(true); // Hiển thị thông báo khi nhấn nút
     };
     return (
         <div className=' bg-gray-900 text-white'>
@@ -98,78 +90,96 @@ function Homepages() {
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center">
                                 <div className="w-[11px] h-[18px] bg-[#6100C2] mr-4"></div>
-                                <h1 className="text-xl font-semibold">Thịnh hành</h1>
+                                <h1 className="text-xl font-semibold">Phim đang chiếu</h1>
                             </div>
-                            <span className="text-sm cursor-pointer hover:text-purple-500">Xem tất cả</span>
                         </div>
                         {/* Movie Cards Grid */}
-                        <div className="max-w-[1300px] mx-auto h-[500px]">
-                            <div className="grid grid-cols-5 gap-5 h-full">
-                                {movieData.slice(0, 5).map((movie) => (
+                        <div className="max-w-[1300px] mx-auto mt-10">
+                            <div className="grid grid-cols-4 gap-6 h-full">
+                                {movieData.slice(0, 4).map((movie) => (
                                     <div
                                         key={movie.id}
-                                        className="h-full relative rounded-[20px] overflow-hidden border border-[#969696] hover:scale-105 transition-transform duration-300"
+                                        className="relative rounded-lg overflow-hidden border border-gray-700 transition-transform duration-300 hover:shadow-lg hover:bg-gray-800"
                                     >
                                         <div
-                                            className="h-[400px] bg-cover bg-center relative"
+                                            className="h-[350px] bg-cover bg-center relative"
                                             style={{ backgroundImage: `url(${movie.image})` }}
                                         >
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleFavoriteClick(movie);
-                                                }}
-                                                className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors duration-300 z-10"
-                                            >
-                                                {favorites.some(fav => fav.id === movie.id) ? (
-                                                    <FavoriteIcon className="text-red-500 text-2xl" />
-                                                ) : (
-                                                    <FavoriteBorderIcon className="text-white text-2xl" />
-                                                )}
-                                            </button>
-                                            <div className="opacity-0 hover:opacity-100 absolute inset-0 bg-black/50 transition-opacity duration-300 p-6 flex items-end">
-                                                <p className="text-white text-sm leading-relaxed">{movie.description}</p>
-                                            </div>
-                                        </div>
-                                        <div className="absolute bottom-0 w-full h-[100px] bg-white/30 backdrop-blur-[8px] p-4">
-                                            <h2 className="font-semibold text-black text-lg truncate mb-2">{movie.title}</h2>
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm text-black">
-                                                    {movie.year} | {movie.genre}
-                                                </span>
-                                                <span className="text-sm text-black font-medium">
-                                                    ⭐ {movie.rating}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="relative mt-16 mb-24">
-                        <h1 className="text-center font-noto-sans font-bold text-5xl leading-tight tracking-wide text-white mb-8"
-                            style={{ textRendering: 'optimizeLegibility' }}>
-                            PHIM SẮP CHIẾU
-                        </h1>
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
-                                {[marvel, lockdown, weath, quantumania, shazam].map((movie, index) => (
-                                    <div key={index} className="flex-none w-80 transform transition duration-500 hover:scale-105">
-                                        <div className="relative h-120 w-full rounded-lg overflow-hidden shadow-lg">
-                                            <img src={movie} alt={`Movie ${index + 1}`} className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                                            <div className="absolute bottom-0 left-0 right-0 p-4">
-                                                <h2 className="text-white text-xl font-bold mb-2">Tên Phim {index + 1}</h2>
-                                                <p className="text-gray-300 text-sm">Khởi chiếu: 01/01/2024</p>
+                                            <div className="absolute inset-0 flex flex-col justify-end p-4 transition-opacity duration-300 opacity-0 hover:opacity-100 bg-black/50">
+                                                <p className="text-white text-xl leading-relaxed mb-4 text-center">{movie.title}</p>
+                                                <div className="flex justify-center mb-2">
+                                                    <button
+                                                        onClick={() => handlePlayClick(movie.trailer)}
+                                                        className="bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center"
+                                                    >
+                                                        <PlayCircleFilledWhiteOutlinedIcon className="mr-2" />
+                                                        Xem Trailer
+                                                    </button>
+                                                </div>
+                                                <div className="flex justify-center">
+                                                    <button
+                                                        // onClick={() => handleBookNow(movie.id)} // Thay đổi hàm xử lý theo nhu cầu
+                                                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300 mr-2"
+                                                    >
+                                                        Đặt Vé
+                                                    </button>
+                                                    <button
+                                                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+                                                    >
+                                                        <Link to={`/movie/${movie.link.split('/').pop()}`}> {/* Lấy tên phim từ link */}
+                                                            Xem Chi Tiết
+                                                        </Link>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
+
+
+                            <div className="flex justify-center mt-4">
+                                <button
+                                    onClick={handleShowMore}
+                                    className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition duration-300"
+                                >
+                                    Xem Thêm
+                                </button>
+                            </div>
+                            {showMessage && (
+                                <div className="mt-4 text-center text-red-500">
+                                    Hiện tại rạp chỉ có 4 phim.
+                                </div>
+                            )}
+
+                            {/* Phần hiển thị trailer */}
+                            {showTrailer && (
+                                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+                                    <div className="relative bg-black rounded-lg p-2">
+                                        <button
+                                            onClick={closeTrailer}
+                                            className="absolute top-2 right-2 text-white hover:text-gray-300"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+
+                                        {/* Video Trailer */}
+                                        <div className="w-[800px] h-[450px]">
+                                            <iframe
+                                                className="w-full h-full rounded-lg"
+                                                src={showTrailer}
+                                                title="Movie Trailer"
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        <div className="absolute left-0 top-1/2 bottom-0 w-24 bg-gradient-to-r from-gray-900 to-transparent z-10"></div>
-                        <div className="absolute right-0 top-1/2 bottom-0 w-24 bg-gradient-to-l from-gray-900 to-transparent z-10"></div>
                     </div>
 
                     <div className="bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 mt-16">

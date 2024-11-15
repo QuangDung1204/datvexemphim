@@ -17,10 +17,6 @@ function Bookingticker() {
 
     // Danh sách rạp chiếu
     const cinemas = [
-        'TheZoo Cinema',
-        'CapriCorn Cinema',
-        'GoldFish Cinema',
-        'BabyNoodle Cinema',
         'Horizon Cinema'
     ];
 

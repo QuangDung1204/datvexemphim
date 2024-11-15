@@ -1,14 +1,13 @@
 // src/data/movieData.js
-import nhabanu from '../imgs/Movie 1.jpg';
-import emvatrinh from '../imgs/Movie 2.jpg';
-import chichiemem from '../imgs/Movie 3.jpg';
-import conNhotMotChong from '../imgs/Movie 4.jpg';
-import bogia from '../imgs/Movie 5.jpg';
+import nhabanu from '../imgs/red-one.jpg';
+import emvatrinh from '../imgs/movie2.jpg';
+import chichiemem from '../imgs/movie5.jpg';
+import conNhotMotChong from '../imgs/movie4.jpg';
 
 export const movieData = [
     {
         id: 1,
-        title: "Nhà Bà Nữ",
+        title: "Red One",
         image: nhabanu,
         link: "/movie/nhabaanu",
         year: "2023",
@@ -17,11 +16,12 @@ export const movieData = [
         description: "Một câu chuyện hài hước về gia đình...",
         releaseDate: "15/01/2023",
         duration: "120 min",
-        showtimes: ['11:00', '14:00', '17:00'] // Giờ chiếu cho phim này
+        showtimes: ['11:00', '14:00', '17:00'],
+        trailer: "https://www.youtube.com/embed/m6MF1MqsDhc" // Thêm link trailer
     },
     {
         id: 2,
-        title: "Em Và Trịnh",
+        title: "Cười Xuyên Biên Giới",
         image: emvatrinh,
         link: "/movie/emvatrinh",
         year: "2023",
@@ -30,11 +30,12 @@ export const movieData = [
         description: "Câu chuyện về cuộc đời nhạc sĩ Trịnh Công Sơn...",
         releaseDate: "10/02/2023",
         duration: "130 min",
-        showtimes: ['12:00', '15:00', '18:00'] // Giờ chiếu cho phim này
+        showtimes: ['12:00', '15:00', '18:00'],
+        trailer: "https://www.youtube.com/embed/4ALt4VT7grw" // Thêm link trailer
     },
     {
         id: 3,
-        title: "Chị Chị Em Em",
+        title: "Venom",
         image: chichiemem,
         link: "/movie/chichiemem",
         year: "2023",
@@ -43,11 +44,12 @@ export const movieData = [
         description: "Một câu chuyện về tình chị em đầy cảm xúc...",
         releaseDate: "05/03/2023",
         duration: "115 min",
-        showtimes: ['13:00', '16:00', '19:00', '22:00'] // Giờ chiếu cho phim này
+        showtimes: ['13:00', '16:00', '19:00', '22:00'],
+        trailer: "https://www.youtube.com/embed/I1q-jmvPNn0" // Thêm link trailer
     },
     {
         id: 4,
-        title: "Con Nhót Mót Chồng",
+        title: "Thần Dược",
         image: conNhotMotChong,
         link: "/movie/connhotmotchong",
         year: "2023",
@@ -56,19 +58,7 @@ export const movieData = [
         description: "Câu chuyện tình yêu giữa hai thế hệ...",
         releaseDate: "20/04/2023",
         duration: "110 min",
-        showtimes: ['10:00', '13:30', '16:30'] // Giờ chiếu cho phim này
+        showtimes: ['10:00', '13:30', '16:30'],
+        trailer: "https://www.youtube.com/embed/77n-Tmes9s8" // Thêm link trailer
     },
-    {
-        id: 5,
-        title: "Bố Già",
-        image: bogia,
-        link: "/movie/BoGia",
-        year: "2021",
-        genre: "Comedy/Drama",
-        rating: "9.0",
-        description: "Một câu chuyện cảm động về tình cha con...",
-        releaseDate: "01/01/2021",
-        duration: "140 min",
-        showtimes: ['11:30', '14:30', '17:30', '20:30'] // Giờ chiếu cho phim này
-    }
 ];

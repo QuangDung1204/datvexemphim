@@ -10,10 +10,6 @@ const MovieSchedule = () => {
     const itemsPerPage = 5;
 
     const cinemas = [
-        { name: 'BabyNoodle Cinema', address: '69 Trần Phú, P. An Phú, An Khê, Gia Lai' },
-        { name: 'GoldFish Cinema', address: '52A Tăng Bạt Hổ, P. Lê lợi, Quy Nhơn, Bình' },
-        { name: 'CapriCorn Cinema', address: 'Hùng Vương, I, TP. Phan Thiết, Bình Thuận' },
-        { name: 'TheZoo Cinema', address: '1Đ. Phú Lợi, Phú Hòa, Thủ Dầu Một, Bình Dương' },
         { name: 'Horizon Cinema', address: '512A Nguyễn An Ninh, Vũng Tàu, Bà Rịa - Vũng Tàu' },
     ];
 

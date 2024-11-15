@@ -125,8 +125,11 @@ const SeatBooking = () => {
                 // Hiển thị mã QR và thông báo thanh toán thành công
                 <div className="payment-success text-center">
                     <h2 className="text-2xl font-bold">Bạn đã thanh toán thành công!</h2>
-                    <QRCode value={`Bạn đã thanh toán thành công cho ${selectedSeats.join(', ')} với tổng tiền là ${totalPrice.toLocaleString()} VNĐ`} size={256} className="mx-auto mt-4" />
-                    <button onClick={handleOk} className="mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-300">
+                    <QRCode
+                        value={`You have successfully paid for ${selectedSeats.join(', ')} with a total amount of ${totalPrice.toLocaleString()} VND`}
+                        size={256}
+                        className="mx-auto mt-4"
+                    />                    <button onClick={handleOk} className="mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-300">
                         OK
                     </button>
                 </div>
